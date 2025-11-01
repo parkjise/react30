@@ -57,7 +57,12 @@ const ExpensesCalcApp = () => {
 		localStorage.setItem("expenses", JSON.stringify(expenses));
 	}, [expenses]);
 
-	console.log("expenses:", expenses);
+	// console.log("expenses:", expenses);
+
+	const clearAllExpenses = () => {
+		setExpense([]);
+	};
+
 	return (
 		<main className="container">
 			<Title text={"Expenses Calculator"} />
@@ -103,6 +108,7 @@ const ExpensesCalcApp = () => {
 						expenses={expenses}
 						// handleDelete={handleDelete}
 						// handleEdit={handleEdit}
+						handleClearAllExpenses={clearAllExpenses}
 					/>
 				</section>
 			</section>
