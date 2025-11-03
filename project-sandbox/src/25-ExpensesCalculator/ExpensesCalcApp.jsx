@@ -63,6 +63,13 @@ const ExpensesCalcApp = () => {
 		setExpense([]);
 	};
 
+	const handleDelete = (id) => {
+		if(window.confirm('Delete Expense ?')){
+			let filteredExpense = expenses.filter((expense) => expense.id !== id)
+				setExpense(filteredExpense);
+		}
+	}
+
 	return (
 		<main className="container">
 			<Title text={"Expenses Calculator"} />
@@ -106,7 +113,7 @@ const ExpensesCalcApp = () => {
 				<section>
 					<ExpensesList
 						expenses={expenses}
-						// handleDelete={handleDelete}
+						handleDelete={handleDelete}
 						// handleEdit={handleEdit}
 						handleClearAllExpenses={clearAllExpenses}
 					/>
