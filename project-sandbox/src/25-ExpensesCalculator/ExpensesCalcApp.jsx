@@ -16,6 +16,7 @@ const ExpensesCalcApp = () => {
 	const [charge, setCharge] = useState("");
 	const [budget, setBudget] = useState("");
 	const [id, setId] = useState(0);
+	const [edit,setEdit] = useState(false)
 
 	const changeBudget = (e) => {
 		// setBudget(e.target.value);
@@ -34,7 +35,7 @@ const ExpensesCalcApp = () => {
 		setAmount(e.target.value);
 	};
 
-	let edit;
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (date !== "" && charge !== "" && amount > 0) {
@@ -43,10 +44,15 @@ const ExpensesCalcApp = () => {
 					return item === id ? { ...item, date, charge, amount } : item;
 				});
 				setExpense(tempExpense);
+				setEdit(false);
 			} else {
 				const singleExpense = { id: uuidV4(), date, charge, amount };
 				setExpense([...expenses, singleExpense]);
 			}
+			setCharge("")
+			setAmount("")
+		}else{
+
 		}
 	};
 
@@ -68,6 +74,15 @@ const ExpensesCalcApp = () => {
 			let filteredExpense = expenses.filter((expense) => expense.id !== id)
 				setExpense(filteredExpense);
 		}
+	}
+
+	const handleEdit = (id) => {
+		let editExpense = expenses.find((expense) => expense.id === id)
+		let {charge,amount} = editExpense;
+		setCharge(charge)
+		setAmount(amount)
+		setId(id)
+		setEdit(true)
 	}
 
 	return (
@@ -92,6 +107,7 @@ const ExpensesCalcApp = () => {
 						amount={amount}
 						handleAmount={handleAmount}
 						handleSubmit={handleSubmit}
+						edit={edit}
 					/>
 					<section className="card mt-2 bg-primary text-light text-right">
 						<div className="card-body">
@@ -114,7 +130,7 @@ const ExpensesCalcApp = () => {
 					<ExpensesList
 						expenses={expenses}
 						handleDelete={handleDelete}
-						// handleEdit={handleEdit}
+						handleEdit={handleEdit}
 						handleClearAllExpenses={clearAllExpenses}
 					/>
 				</section>
