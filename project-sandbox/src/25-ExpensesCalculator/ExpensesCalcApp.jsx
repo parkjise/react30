@@ -4,6 +4,7 @@ import ExpensesForm from "./components/ExpensesForm";
 import ExpensesList from "./components/ExpensesList";
 import { BudgetStyle } from "./components/styles/Budget.style";
 import { parse, v4 as uuidV4 } from "uuid";
+import Alert from "../components/Alert";
 
 const initialExpense = localStorage.getItem("expenses")
   ? JSON.parse(localStorage.getItem("expenses"))
@@ -17,6 +18,9 @@ const ExpensesCalcApp = () => {
   const [budget, setBudget] = useState("");
   const [id, setId] = useState(0);
   const [edit, setEdit] = useState(false);
+  const [alert, setAlert] = useState({
+    show: false,
+  });
 
   const changeBudget = (e) => {
     // setBudget(e.target.value);
@@ -35,6 +39,17 @@ const ExpensesCalcApp = () => {
     setAmount(e.target.value);
   };
 
+  const handleAlert = ({ type, text }) => {
+    setAlert({
+      show: true,
+      type,
+      text,
+    });
+    setTimeout(() => {
+      setAlert({ show: false });
+    }, 3000);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (date !== "" && charge !== "" && amount > 0) {
@@ -44,13 +59,16 @@ const ExpensesCalcApp = () => {
         });
         setExpense(tempExpense);
         setEdit(false);
+        handleAlert({ type: "success", text: "Expense Edited" });
       } else {
         const singleExpense = { id: uuidV4(), date, charge, amount };
         setExpense([...expenses, singleExpense]);
+        handleAlert({ type: "success", text: "Expense Edited" });
       }
       setCharge("");
       setAmount("");
     } else {
+      handleAlert({ type: "danger", text: "Please Complete all fields" });
     }
   };
 
@@ -65,6 +83,7 @@ const ExpensesCalcApp = () => {
 
   const clearAllExpenses = () => {
     setExpense([]);
+    handleAlert({ type: "danger", text: "Please Complete all fields" });
   };
 
   const handleDelete = (id) => {
@@ -87,6 +106,7 @@ const ExpensesCalcApp = () => {
     <main className="container">
       <Title text={"Expenses Calculator"} />
       {/* Alert comp */}
+      {alert.show && <Alert type={alert.type} text={alert.text} />}
       <section
         style={{
           display: "grid",
